@@ -140,7 +140,6 @@ def get_location_name_from_id(id):
 
 
 def business_menu(user_id):
-    
     try:
         location_id = int(input("Please enter the ID of the location you wish to view the appointments of. \n"))
     except:
