@@ -22,9 +22,7 @@ def sign_in():
     # creates new User with full_name if one doesn't already exist, tosses that into Users table 
 
     current_user_id = log_in_user(full_name)
-    print("ID:", current_user_id)
     
-
     password = input("Please enter your password (hint: it's ''orange'')\n")
     # password is just a formality
     while password != "orange":
@@ -66,7 +64,7 @@ def menu(current_user_id):
         exit()
     else:
         print("Invalid selection.")
-
+# hehehehe
 def done(current_user_id):
     cont = input("Would you like to continue? (Y/n) \n")
     done = False
@@ -104,8 +102,6 @@ def book_new(date, time, user_id, location_id):
     print(f"Appointment booked at {location_name} for {user_name} on {date} at {time}.")
     done(current_user_id)
 
-
-    
 
 def print_locations_table():
     session = Session()
