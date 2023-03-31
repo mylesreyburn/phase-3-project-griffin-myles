@@ -5,7 +5,7 @@ from sqlalchemy.ext.declarative import declarative_base
 import sqlite3
 
 Base = declarative_base()
-engine = create_engine("sqlite:///database.db")
+engine = create_engine("sqlite:///db/database.db")
 
 class User(Base):
 

@@ -10,9 +10,9 @@ if __name__ == "__main__":
     session = Session()
 
     # Delete users, locations, and appointments upon initiation
-    # session.query(User).delete()
-    # session.query(Location).delete()
-    # session.query(Appointment).delete()
+    session.query(User).delete()
+    session.query(Location).delete()
+    session.query(Appointment).delete()
 
     # Create instances for each class
 
@@ -30,8 +30,6 @@ if __name__ == "__main__":
     session.add(location_2)
     location_3 = Location(location="Masseuse")
     session.add(location_3)
-    location_4 = Location(location="Masseuse")
-    session.add(location_4)
     session.commit()
 
     appointment_1 = Appointment(time="13:00", date="04/03/1990", user_id=1, location_id=1)
@@ -42,7 +40,7 @@ if __name__ == "__main__":
     session.add(appointment_3)
     appointment_4 = Appointment(time="13:50", date="01/30/2000", user_id=3, location_id=3)
     session.add(appointment_4)
-    appointment_5 = Appointment(time="12:35", date="12/09/2021", user_id=3, location_id=4)
+    appointment_5 = Appointment(time="12:35", date="12/09/2021", user_id=1, location_id=3)
     session.add(appointment_5)
     session.commit()
     
