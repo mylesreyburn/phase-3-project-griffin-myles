@@ -35,21 +35,35 @@ def sign_in():
 def menu(current_user_id):
     print("")
     print("What would you like to do today?")
-    direct = input("Press 1 to book a new Appointment" + 
-                   "\nPress 2 to view your current appointments" + 
-                   "\nPress ENTER if Business Owner\n")
+    direct = input("Enter 1 to book a new Appointment" + 
+                   "\nEnter 2 to view your current appointments" + 
+                   "\nPress ENTER if Business Owner" +
+                   "\nEnter X to cancel. \n")
     
     if direct == "1":
         print("Cool!")
         date = input("Enter date (MM/DD/YYYY): \n")
         time = input("Enter time (24 hour time) (ex: 15:00 rather than 3:00 PM): \n")
         print_locations_table()
-        location_id = int(input("Enter the ID of the location you wish to book at. \n"))
+        try:
+            location_id = int(input("Enter the ID of the location you wish to book at. \n"))
+        except:
+            print("Invalid entry! Please make sure you enter only one number.")
+
         book_new(date, time, current_user_id, location_id)
     elif direct == "2":
-        view_appointments(current_user_id)
+        view_user_appointments(current_user_id)
     elif direct == "":
+        password = input("Please enter your password (hint: it's ''orange'')\n")
+        while password != "orange":
+            password = input("Wrong password. Please try again. (hint: it's ''orange'') \n")
+        print_locations_table()
         business_menu(current_user_id)
+
+    elif direct.upper() == "X":
+        print("Have a good day!")
+        print("Closing...")
+        exit()
     else:
         print("Invalid selection.")
 
@@ -105,7 +119,7 @@ def print_locations_table():
 
     session.close()
 
-def view_appointments(user_id):
+def view_user_appointments(user_id):
     session = Session()
 
     appointments = session.query(Appointment).filter_by(user_id=user_id).all()
@@ -130,10 +144,39 @@ def get_location_name_from_id(id):
 
 
 def business_menu(user_id):
-    password = input("Please enter your password (hint: it's ''orange'')\n")
-    while password != "orange":
-        password = input("Wrong password. Please try again. (hint: it's ''orange'') \n")
-    print("Welcome! Which business is yours?\n------------------------------------")
+    
+    try:
+        location_id = int(input("Please enter the ID of the location you wish to view the appointments of. \n"))
+    except:
+        print("Invalid entry! Please make sure you enter only one number.")
+        business_menu(user_id)
+        
+    while location_id > 5 or location_id < 1:
+        location_id = int(input("Invalid ID. Please try again. \n"))
+    view_business_appointments(user_id, location_id)
+
+def view_business_appointments(current_user_id, location_id):
+    session = Session()
+
+    appointments = session.query(Appointment).filter_by(location_id=location_id).all()
+
+    data = [[a.date, a.time, get_user_name_from_id(a.user_id)] for a in appointments]
+
+    headers = ["DATE", "TIME", "USER"]
+    if len(data) > 0:
+        print(tabulate(data, headers=headers, tablefmt="fancy_grid"))
+    else:
+        print("No appointments found! Hopefully someone will make one soon.")
+
+    session.close()
+    done(current_user_id)
+
+def get_user_name_from_id(id):
+    session = Session()
+    user = session.query(User).filter_by(id=id).first()
+    user_name = user.name
+    session.close()
+    return user_name
 
 def log_in_user(name):
     session = Session()
